@@ -18,14 +18,14 @@ public class CustomUserDetailsService implements UserDetailsService {
     private final ApplicationUserRepository repository;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         // Busca tu entidad en BD
-        ApplicationUser usuario = repository.findByUsername(username)
+        ApplicationUser usuario = repository.findByEmail(email)
             .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado"));
 
         // Convierte tu entidad a UserDetails (Spring Security)
         return User.builder()
-            .username(usuario.getUsername())
+            .username(usuario.getEmail())
             .password(usuario.getPassword()) // Debe estar hasheada con BCrypt
             .roles(usuario.getRoles().stream().map(Role::getRole).toArray(String[]::new)) // Convierte roles a String[]
             .build();

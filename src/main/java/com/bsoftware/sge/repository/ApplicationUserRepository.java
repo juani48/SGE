@@ -7,5 +7,5 @@ import org.springframework.data.repository.CrudRepository;
 import com.bsoftware.sge.model.ApplicationUser;
 
 public interface ApplicationUserRepository extends CrudRepository<ApplicationUser, Long> {
-    Optional<ApplicationUser> findByUsername(String username);
+    Optional<ApplicationUser> findByEmail(String email);
 }

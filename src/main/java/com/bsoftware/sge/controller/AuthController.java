@@ -31,13 +31,13 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest request) {
-        if (applicationUserRepository.findByUsername(request.getUsername()).isPresent()) {
+        if (applicationUserRepository.findByEmail(request.getEmail()).isPresent()) {
             return ResponseEntity.status(HttpStatus.CONFLICT)
-                    .body("El nombre de usuario ya está registrado");
+                    .body("El email ya está registrado");
         }
 
         ApplicationUser user = new ApplicationUser();
-        user.setUsername(request.getUsername());
+        user.setEmail(request.getEmail());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.addRole(new Role(RoleType.CREATE_PROCEDURE.getText()));
 

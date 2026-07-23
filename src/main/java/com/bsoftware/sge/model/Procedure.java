@@ -43,6 +43,6 @@ public class Procedure  {
     private ApplicationUser modificationUser;
 
     @ManyToOne()
-    @JoinColumn(name = "proceeding_id", nullable = false)
-    private File proceeding;
+    @JoinColumn(name = "file_id", nullable = false)
+    private File file;
 }

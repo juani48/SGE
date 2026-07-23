@@ -47,5 +47,5 @@ public class File {
     private ApplicationUser modificationUser;
     
     @OneToMany(mappedBy = "proceeding", orphanRemoval = true, cascade = CascadeType.ALL)
-    private List<Procedure> procedures;
+    private List<Procedure> procedures = new java.util.ArrayList<>();
 }

@@ -16,20 +16,16 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 @Service
 public class FileService {
-    private final FileRepository fileStateService;
+    private final FileRepository fileRepository;
     private final UserService userService;
 
-    public Result<File> create(File file, Long userId) {
+    public Result<File> create(String cover, Long userId) {
         try {
             Result<ApplicationUser> userResult = userService.findById(userId);
             if (!userResult.isOk()) {
                 return Result.fail(userResult.getError());
             }
-            file.setModificationUser(userResult.getData());
-            file.setCreation(LocalDate.now());
-            file.setModification(LocalDate.now());
-            file.setState(FileState.NEWLY_STARTED);
-            File savedFile = fileStateService.save(file);
+            File savedFile = fileRepository.save(this.setData(cover, userResult.getData()));
             return Result.ok(savedFile);
         } catch (Exception e) {
             return Result.fail("Error saving file: " + e.getMessage());
@@ -37,7 +33,7 @@ public class FileService {
     }
 
     public Result<File> getById(Long id) {
-        Optional<File> opt = fileStateService.findById(id);
+        Optional<File> opt = fileRepository.findById(id);
         if (opt.isPresent()) {
             return Result.ok(opt.get());
         } else {
@@ -47,16 +43,22 @@ public class FileService {
 
     public Result<Iterable<File>> getAll() {
         try {
-            Iterable<File> files = fileStateService.findAll();
+            Iterable<File> files = fileRepository.findAll();
             return Result.ok(files);
         } catch (Exception e) {
             return Result.fail("Error retrieving files: " + e.getMessage());
         }
     }
 
-    public Result<File> update(File file) {
+    public Result<File> update(File file, Long userId) {
         try {
-            File updatedFile = fileStateService.save(file);
+            Result<ApplicationUser> userResult = userService.findById(userId);
+            if (!userResult.isOk()) {
+                return Result.fail(userResult.getError());
+            }
+            file.setModificationUser(userResult.getData());
+            file.setModification(LocalDate.now());
+            File updatedFile = fileRepository.save(file);
             return Result.ok(updatedFile);
         } catch (Exception e) {
             return Result.fail("Error updating file: " + e.getMessage());
@@ -65,10 +67,20 @@ public class FileService {
 
     public Result<Void> delete(Long id) {
         try {
-            fileStateService.deleteById(id);
+            fileRepository.deleteById(id);
             return Result.ok(null);
         } catch (Exception e) {
             return Result.fail("Error deleting file: " + e.getMessage());
         }
+    }
+
+    private File setData(String cover, ApplicationUser user) {
+        File file = new File();
+        file.setCover(cover);
+        file.setModificationUser(user);
+        file.setCreation(LocalDate.now());
+        file.setModification(LocalDate.now());
+        file.setState(FileState.NEWLY_STARTED);
+        return file;
     }
 }
