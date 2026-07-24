@@ -40,7 +40,7 @@ public class ApplicationUser {
     private List<Procedure> procedures;
 
     @OneToMany(mappedBy = "modificationUser")
-    private List<File> proceedings;
+    private List<File> files;
 
     @ManyToMany
     @JoinTable(
@@ -49,6 +49,13 @@ public class ApplicationUser {
         inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     private List<Role> roles = new java.util.ArrayList<>();
+
+    public ApplicationUser(String name, String lastName, String email, String password) {
+        this.name = name;
+        this.lastName = lastName;
+        this.email = email;
+        this.password = password;
+    }
 
     public void addRole(Role role) {
         this.roles.add(role);

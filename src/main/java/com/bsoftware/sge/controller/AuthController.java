@@ -33,7 +33,7 @@ public class AuthController {
     public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest request) {
         if (applicationUserRepository.findByEmail(request.getEmail()).isPresent()) {
             return ResponseEntity.status(HttpStatus.CONFLICT)
-                    .body("El email ya está registrado");
+                .body("El email ya está registrado");
         }
 
         ApplicationUser user = new ApplicationUser();

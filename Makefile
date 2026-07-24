@@ -39,8 +39,8 @@ up-dev:
 down:
 	$(COMPOSE) down
 
-.PHONY: down-clean
-down-clean:
+.PHONY: clean
+clean:
 	$(COMPOSE) down -v
 	@echo "Volumen de PostgreSQL eliminado. Los datos se han perdido."
 

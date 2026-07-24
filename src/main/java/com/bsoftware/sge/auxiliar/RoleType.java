@@ -1,6 +1,7 @@
 package com.bsoftware.sge.auxiliar;
 
 public enum RoleType {
+    ADMIN("ADMIN"),
     CREATE_PROCEEDING("CREATE_PROCEEDING"),
     CREATE_PROCEDURE("CREATE_PROCEDURE"),
     EDIT_PROCEEDING("EDIT_PROCEEDING"),

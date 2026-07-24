@@ -46,6 +46,6 @@ public class File {
     @JoinColumn(name = "modification_user_id", nullable = false)
     private ApplicationUser modificationUser;
     
-    @OneToMany(mappedBy = "proceeding", orphanRemoval = true, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "file", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<Procedure> procedures = new java.util.ArrayList<>();
 }
