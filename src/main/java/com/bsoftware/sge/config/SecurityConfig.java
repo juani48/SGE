@@ -2,8 +2,10 @@ package com.bsoftware.sge.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -28,6 +30,11 @@ public class SecurityConfig {
     }
 
     @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+        return config.getAuthenticationManager();
+    }
+
+    @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider(userDetailsService);
         provider.setPasswordEncoder(this.passwordEncoder());
@@ -49,21 +56,18 @@ public class SecurityConfig {
                 ).permitAll()
                 
                 .requestMatchers(
-                    "/admin/**"
-                ).hasRole("ADMIN") // ejemplo de restricción por rol
+                    "/**"
+                ).hasRole("ADMIN") 
 
                 .anyRequest().authenticated()
             )
             .formLogin(form -> form
-                .loginPage("/login") // pagina de login
-                .loginProcessingUrl("/api/login") // endpoint para procesar login
-                .defaultSuccessUrl("/", true) // redirige a la raíz después del login exitoso
-                .successHandler((req, res, authentication) -> {
-                    res.setStatus(HttpServletResponse.SC_OK);
-                })
-                .failureHandler((req, res, exception) -> {
-                    res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                })
+                .loginPage("/login") // página de login personalizada
+                .loginProcessingUrl("/login") // URL donde se envía el formulario
+                .defaultSuccessUrl("/", true) // redirige a inicio tras éxito
+                .failureUrl("/login?error=true") // redirige con error
+                .usernameParameter("email")
+                .passwordParameter("password")
                 .permitAll()
             )
             .logout(logout -> logout
@@ -74,9 +78,8 @@ public class SecurityConfig {
             )
             .sessionManagement(session -> session
                 .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
-                .maximumSessions(1) // opcional: una sesión por usuario
+                .maximumSessions(1) // una sesión por usuario
             );
-            //.csrf(csrf -> csrf.disable()); // si consumís la API desde un front separado (SPA); en apps monolíticas con formularios, mejor dejarlo activo
 
         return http.build();
     }

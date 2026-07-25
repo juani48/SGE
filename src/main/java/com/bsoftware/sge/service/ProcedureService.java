@@ -52,11 +52,18 @@ public class ProcedureService {
         }
     }
 
-    public Result<Procedure> update(Procedure procedure, Long userId) {
+    public Result<Procedure> update(String content, Long id, String state, Long userId) {
         Result<ApplicationUser> userResult = userService.findById(userId);
         if (!userResult.isOk()) {
             return Result.fail(userResult.getError());
         }
+        Result<Procedure> procedureResult = getById(id);
+        if (!procedureResult.isOk()) {
+            return Result.fail(procedureResult.getError());
+        }
+        Procedure procedure = procedureResult.getData();
+        procedure.setContent(content);
+        procedure.setState(ProcedureState.valueOf(state));
         procedure.setModificationUser(userResult.getData());
         Procedure updatedProcedure = procedureRepository.save(procedure);
         return Result.ok(updatedProcedure);

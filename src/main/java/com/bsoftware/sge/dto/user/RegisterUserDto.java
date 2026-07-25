@@ -1,4 +1,4 @@
-package com.bsoftware.sge.request;
+package com.bsoftware.sge.dto.user;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -10,7 +10,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Data
-public class RegisterRequest {
+public class RegisterUserDto {
     
     @NotBlank(message = "Email is required")
     @Email 

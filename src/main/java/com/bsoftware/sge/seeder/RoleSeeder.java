@@ -17,11 +17,11 @@ public class RoleSeeder extends BaseSeeder<Role, Long> {
             repository,
             List.of(
                 new Role("ADMIN"),
-                new Role("CREATE_PROCEEDING"),
+                new Role("CREATE_FILE"),
                 new Role("CREATE_PROCEDURE"),
-                new Role("EDIT_PROCEEDING"),
+                new Role("EDIT_FILE"),
                 new Role("EDIT_PROCEDURE"),
-                new Role("DELETE_PROCEEDING"),
+                new Role("DELETE_FILE"),
                 new Role("DELETE_PROCEDURE")
             ),
             "Role"

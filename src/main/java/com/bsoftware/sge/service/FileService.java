@@ -1,6 +1,7 @@
 package com.bsoftware.sge.service;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
@@ -41,21 +42,24 @@ public class FileService {
         }
     }
 
-    public Result<Iterable<File>> getAll() {
-        try {
-            Iterable<File> files = fileRepository.findAll();
-            return Result.ok(files);
-        } catch (Exception e) {
-            return Result.fail("Error retrieving files: " + e.getMessage());
-        }
+    public List<File> getAll() {
+        List<File> files = fileRepository.findAll();
+        return files.stream().toList();
     }
 
-    public Result<File> update(File file, Long userId) {
+    public Result<File> update(Long id, String cover, String status, Long userId) {
         try {
             Result<ApplicationUser> userResult = userService.findById(userId);
             if (!userResult.isOk()) {
                 return Result.fail(userResult.getError());
             }
+            Optional<File> opt = fileRepository.findById(id);
+            if (!opt.isPresent()) {
+                return Result.fail("File not found with id: " + id);
+            }
+            File file = opt.get();
+            file.setCover(cover);
+            file.setState(FileState.valueOf(status));
             file.setModificationUser(userResult.getData());
             file.setModification(LocalDate.now());
             File updatedFile = fileRepository.save(file);

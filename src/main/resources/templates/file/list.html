@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de Expedientes</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-5">
+    <h1>Lista de Expedientes</h1>
+    <a th:href="@{/file/create}" class="btn btn-primary mb-3">Crear Nuevo Expediente</a>
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Contenido</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="item : ${files.files}">
+            <td th:text="${item.id}"></td>
+            <td th:text="${item.cover}"></td>
+            <td th:text="${item.state}"></td>
+            <td>
+                <a th:href="@{/file/{id}(id=${item.id})}" class="btn btn-sm btn-info">Ver</a>
+                <a th:href="@{/file/update/{id}(id=${item.id})}" class="btn btn-sm btn-warning">Editar</a>
+                <form th:action="@{/api/file/delete/{id}(id=${item.id})}" method="post" style="display:inline;">
+                    <button type="submit" class="btn btn-sm btn-danger">Eliminar</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

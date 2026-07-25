@@ -29,7 +29,7 @@ public class AdminSeeder implements CommandLineRunner {
             ApplicationUser admin = new ApplicationUser();
             admin.setName("Admin");
             admin.setLastName("Admin");
-            admin.setEmail("admin@exampl.com");
+            admin.setEmail("admin@example.com");
             admin.setPassword(passwordEncoder.encode("admin"));
             admin.addRole(adminRole);
             repository.save(admin);

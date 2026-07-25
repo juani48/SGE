@@ -1,13 +1,12 @@
 package com.bsoftware.sge.service;
 
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import com.bsoftware.sge.config.CustomUserDetails;
 import com.bsoftware.sge.model.ApplicationUser;
-import com.bsoftware.sge.model.Role;
 import com.bsoftware.sge.repository.ApplicationUserRepository;
 
 import lombok.AllArgsConstructor;
@@ -19,14 +18,10 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        ApplicationUser usuario = repository.findByEmail(email)
+        ApplicationUser usuario = repository.findByEmailWithRoles(email)
             .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado"));
 
         // Convierte tu entidad a UserDetails (Spring Security)
-        return User.builder()
-            .username(usuario.getEmail())
-            .password(usuario.getPassword()) // Debe estar hasheada con BCrypt
-            .roles(usuario.getRoles().stream().map(Role::getRole).toArray(String[]::new)) // Convierte roles a String[]
-            .build();
+        return new CustomUserDetails(usuario);
     }
 }

@@ -3,10 +3,10 @@ package com.bsoftware.sge.controller;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bsoftware.sge.auxiliar.RoleType;
+import com.bsoftware.sge.dto.user.RegisterUserDto;
 import com.bsoftware.sge.model.ApplicationUser;
 import com.bsoftware.sge.model.Role;
 import com.bsoftware.sge.repository.ApplicationUserRepository;
-import com.bsoftware.sge.request.RegisterRequest;
 
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -30,7 +30,7 @@ public class AuthController {
     private final PasswordEncoder passwordEncoder;
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest request) {
+    public ResponseEntity<?> register(@Valid @RequestBody RegisterUserDto request) {
         if (applicationUserRepository.findByEmail(request.getEmail()).isPresent()) {
             return ResponseEntity.status(HttpStatus.CONFLICT)
                 .body("El email ya está registrado");
