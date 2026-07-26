@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout(~{::title}, ~{::content})}">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Mi Perfil</title>
+</head>
+
+<body>
+    <div th:fragment="content">
+        <div class="container mt-4">
+            <h1><i class="bi bi-person-circle"></i> Mi Perfil</h1>
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <dl class="row">
+                        <dt class="col-sm-3">Email</dt>
+                        <dd class="col-sm-9" th:text="${user.email}"></dd>
+
+                        <dt class="col-sm-3">Nombre completo</dt>
+                        <dd class="col-sm-9" th:text="${user.fullName} ?: 'No especificado'"></dd>
+
+                        <dt class="col-sm-3">Rol</dt>
+                        <dd class="col-sm-9" th:text="${user.role}"></dd>
+
+                        <dt class="col-sm-3">Fecha de registro</dt>
+                        <dd class="col-sm-9" th:text="${#temporals.format(user.createdAt, 'dd/MM/yyyy HH:mm')}"></dd>
+                    </dl>
+                    <a th:href="@{/edit-profile}" class="btn btn-primary">
+                        <i class="bi bi-pencil"></i> Editar perfil
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

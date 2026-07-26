@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layout}" lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Detalle del Trámite</title>
+</head>
+
+<body>
+    <div layout:fragment="content">
+        <div class="container mt-5">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h1 class="h4 mb-0">Detalle del procedimiento #<span th:text="${procedure.id}"></span></h1>
+                </div>
+                <div class="card-body">
+                    <dl class="row">
+                        <dt class="col-sm-3">ID</dt>
+                        <dd class="col-sm-9" th:text="${procedure.id}">123</dd>
+
+                        <dt class="col-sm-3">Estado</dt>
+                        <dd class="col-sm-9" th:text="${procedure.state}">ACTIVE</dd>
+
+                        <dt class="col-sm-3">Contenido</dt>
+                        <dd class="col-sm-9" th:text="${procedure.content}">Descripción del procedimiento</dd>
+
+                        <dt class="col-sm-3">Fecha de creación</dt>
+                        <dd class="col-sm-9" th:text="${procedure.creation}">2026-07-26 19:00:00</dd>
+
+                        <dt class="col-sm-3">Última modificación</dt>
+                        <dd class="col-sm-9" th:text="${procedure.modification}">2026-07-26 19:01:00</dd>
+
+                        <dt class="col-sm-3">Modificado por</dt>
+                        <dd class="col-sm-9" th:text="${procedure.modificationUser}">admin@example.com</dd>
+                    </dl>
+                </div>
+                <div class="card-footer text-end">
+                    <a th:href="@{/file/{id}(id=${procedure.fileId})}" class="btn btn-secondary">Volver al Expediente</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

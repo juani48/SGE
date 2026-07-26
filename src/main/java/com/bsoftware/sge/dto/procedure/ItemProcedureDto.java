@@ -9,14 +9,16 @@ import lombok.Setter;
 @Getter
 @Setter
 @Data
-public class UpdateProcedureDto {
+public class ItemProcedureDto {
     private Long id;
     private String content;
     private String state;
+    private String creation;
 
-    public UpdateProcedureDto(Procedure procedure) {
+    public ItemProcedureDto(Procedure procedure) {
         this.id = procedure.getId();
         this.content = procedure.getContent();
-        this.state = procedure.getState().name();
+        this.state = procedure.getState().getContent();
+        this.creation = procedure.getCreation().toString();
     }
 }

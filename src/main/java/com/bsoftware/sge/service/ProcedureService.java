@@ -3,6 +3,8 @@ package com.bsoftware.sge.service;
 import java.time.LocalDate;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.bsoftware.sge.auxiliar.ProcedureState;
@@ -43,13 +45,8 @@ public class ProcedureService {
         }
     }
 
-    public Result<Iterable<Procedure>> getAllByFileId(Long fileId) {
-        try {
-            Iterable<Procedure> procedures = procedureRepository.findAllByFileId(fileId);
-            return Result.ok(procedures);
-        } catch (Exception e) {
-            return Result.fail("Error retrieving procedures: " + e.getMessage());
-        }
+    public Page<Procedure> getAllByFileId(Long fileId, Pageable pageable) {
+        return procedureRepository.findByFileId(fileId, pageable);
     }
 
     public Result<Procedure> update(String content, Long id, String state, Long userId) {

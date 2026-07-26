@@ -30,11 +30,11 @@ public class FileController {
         Result<File> result = fileService.create(request.getCover(), userDetails.getId());
         if (result.isOk()) {
             redirectAttributes.addFlashAttribute("successMessage", "File created successfully");
-            return "redirect:/file/" + result.getData().getId(); // Redirect to the detail page of the created file
+            return "redirect:/file/" + result.getData().getId(); 
         }  
         else {
             redirectAttributes.addFlashAttribute("errorMessage", result.getError());
-            return "redirect:/files/form"; // Redirect back to the create file page
+            return "redirect:/files/form"; 
         }
     }
     

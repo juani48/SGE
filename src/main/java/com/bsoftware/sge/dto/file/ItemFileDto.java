@@ -8,21 +8,14 @@ import lombok.Getter;
 
 @Getter
 @Data
-public class DetailFileDto {
+public class ItemFileDto {
     private Long id;
     private String cover;
     private String state;
-    private String creation;
-    private String modification;
-    private String modificationUserEmail;
 
-    public DetailFileDto(File file) {
+    public ItemFileDto(File file) {
         this.id = file.getId();
         this.cover = file.getCover();
         this.state = FileState.valueOf(file.getState().name()).getContent();
-        this.creation = file.getCreation().toString();
-        this.modification = file.getModification().toString();
-        this.modificationUserEmail = file.getModificationUser().getEmail();
     }
 }
-

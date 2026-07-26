@@ -1,10 +1,47 @@
 <!DOCTYPE html>
-<html lang="en">    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Document</title>
-    </head>
-    <body>
-        <h1>Welcome to the Home Page</h1>
-    </body>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layout}">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Inicio</title>
+</head>
+
+<body>
+    <div layout:fragment="content">
+        <div class="container mt-4">
+            <div class="row justify-content-center">
+                <div class="col-md-8 text-center">
+                    <h1 class="display-4 fw-bold">Bienvenido al Sistema de Gestión de Expedientes</h1>
+                    <p class="lead text-muted">Administra todos tus expedientes de forma rápida y sencilla.</p>
+                    <hr class="my-4">
+                </div>
+            </div>
+
+            <div class="row mt-4 g-4">
+                <div class="col-md-6">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body text-center">
+                            <i class="bi bi-list-ul" style="font-size: 3rem; color: #0d6efd;"></i>
+                            <h5 class="card-title mt-3">Lista de Expedientes</h5>
+                            <p class="card-text">Consulta, edita o elimina expedientes existentes.</p>
+                            <a th:href="@{/files}" class="btn btn-primary">Ir al listado</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body text-center">
+                            <i class="bi bi-plus-circle" style="font-size: 3rem; color: #198754;"></i>
+                            <h5 class="card-title mt-3">Crear Nuevo Expediente</h5>
+                            <p class="card-text">Añade un nuevo expediente al sistema.</p>
+                            <a th:href="@{/file/create}" class="btn btn-success">Crear ahora</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
 </html>

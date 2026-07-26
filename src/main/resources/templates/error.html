@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layout}">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Error</title>
+</head>
+
+<body>
+    <div layout:fragment="content">
+        <div class="container mt-4">
+            <h3>Ocurrió un problema inesperado</h3>
+            <p th:text="${message} ?: 'El servidor no responde.'"></p>
+            <!-- Enlace manual al home -->
+            <a class="btn-home" th:href="@{/}">Volver al inicio</a>
+        </div>
+    </div>
+</body>
+
+</html>
