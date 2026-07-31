@@ -9,6 +9,7 @@ import com.bsoftware.sge.dto.file.FormFileDto;
 import com.bsoftware.sge.model.File;
 import com.bsoftware.sge.service.FileService;
 
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -26,11 +27,11 @@ public class FileController {
 
     @PostMapping("/create")
     @PreAuthorize("hasRole('CREATE_FILE') or hasRole('ADMIN')")
-    public String create(@ModelAttribute FormFileDto request, @AuthenticationPrincipal CustomUserDetails userDetails, RedirectAttributes redirectAttributes) {
+    public String create(@Valid @ModelAttribute FormFileDto request, @AuthenticationPrincipal CustomUserDetails userDetails, RedirectAttributes redirectAttributes) {
         Result<File> result = fileService.create(request.getCover(), userDetails.getId());
         if (result.isOk()) {
             redirectAttributes.addFlashAttribute("successMessage", "File created successfully");
-            return "redirect:/file/" + result.getData().getId(); 
+            return "redirect:/file/detail/" + result.getData().getId(); 
         }  
         else {
             redirectAttributes.addFlashAttribute("errorMessage", result.getError());
@@ -40,14 +41,16 @@ public class FileController {
     
     @PostMapping("/update")
     @PreAuthorize("hasRole('UPDATE_FILE') or hasRole('ADMIN')")
-    public String update(@ModelAttribute FormFileDto request, @AuthenticationPrincipal CustomUserDetails userDetails, RedirectAttributes redirectAttributes) {
+    public String update(@Valid @ModelAttribute FormFileDto request, @AuthenticationPrincipal CustomUserDetails userDetails, RedirectAttributes redirectAttributes) {
         Result<File> result = fileService.update(request.getId(), request.getCover(), request.getState(), userDetails.getId());
         if (result.isOk()) {
+            System.out.println("File updated successfully: " + result.getData());
             redirectAttributes.addFlashAttribute("successMessage", "File updated successfully");
-            return "redirect:/file/" + result.getData().getId(); // Redirect to the detail page of the updated file
+            return "redirect:/file/detail/" + result.getData().getId(); 
         } else {
+            System.out.println("Error updating file: " + result.getError());
             redirectAttributes.addFlashAttribute("errorMessage", result.getError());
-            return "redirect:/file/form/" + request.getId(); // Redirect back to the edit file page
+            return "redirect:/file/form";
         }
     }
     

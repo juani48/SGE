@@ -15,6 +15,7 @@ import com.bsoftware.sge.dto.procedure.FormProcedureDto;
 import com.bsoftware.sge.model.Procedure;
 import com.bsoftware.sge.service.ProcedureService;
 
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
@@ -25,30 +26,30 @@ public class ProcedureController {
 
     @PostMapping("/create")
     @PreAuthorize("hasRole('CREATE_PROCEDURE') or hasRole('ADMIN')")
-    public String create(@ModelAttribute FormProcedureDto request, @AuthenticationPrincipal CustomUserDetails userDetails, RedirectAttributes redirectAttributes) {
+    public String create(@Valid @ModelAttribute FormProcedureDto request, @AuthenticationPrincipal CustomUserDetails userDetails, RedirectAttributes redirectAttributes) {
         Result<Procedure> result = procedureService.create(request.getContent(), request.getFileId(), userDetails.getId());
         if (result.isOk()) {
             redirectAttributes.addFlashAttribute("successMessage", "Procedure created successfully");
             redirectAttributes.addFlashAttribute("procedure", result.getData());
-            return "redirect:/procedure/" + result.getData().getId(); // Redirect to the detail page of the created procedure
+            return "redirect:/procedure/detail/" + result.getData().getId(); // Redirect to the detail page of the created procedure
         }  
         else {
             redirectAttributes.addFlashAttribute("errorMessage", result.getError());
-            return "redirect:/file/" + request.getId(); // Redirect back to the detail file page
+            return "redirect:/procedure/create";
         }
     }
     
     @PostMapping("/update")
     @PreAuthorize("hasRole('UPDATE_PROCEDURE') or hasRole('ADMIN')")
-    public String update(@ModelAttribute FormProcedureDto request, @AuthenticationPrincipal CustomUserDetails userDetails, RedirectAttributes redirectAttributes) {
+    public String update(@Valid @ModelAttribute FormProcedureDto request, @AuthenticationPrincipal CustomUserDetails userDetails, RedirectAttributes redirectAttributes) {
         Result<Procedure> result = procedureService.update(request.getContent(), request.getFileId(), request.getState(), userDetails.getId());
         if (result.isOk()) {
             redirectAttributes.addFlashAttribute("successMessage", "Procedure updated successfully");
             redirectAttributes.addFlashAttribute("procedure", result.getData());
-            return "redirect:/procedure/" + result.getData().getId(); // Redirect to the detail page of the updated procedure
+            return "redirect:/procedure/detail/" + result.getData().getId(); // Redirect to the detail page of the updated procedure
         } else {
             redirectAttributes.addFlashAttribute("errorMessage", result.getError());
-            return "redirect:/procedure/edit/" + request.getId(); // Redirect back to the edit procedure page
+            return "redirect:/procedure/update"; // Redirect back to the edit procedure page
         }
     }
     

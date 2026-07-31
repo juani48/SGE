@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout :: head}"></head>
+<body>
+    <div th:replace="~{layout :: body}">
+        <div th:fragment="content" class="container-fluid">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2><i class="bi bi-people icon-brand"></i> Usuarios</h2>
+                <a th:href="@{/admin/users/create}" class="btn btn-primary"><i class="bi bi-plus-circle"></i> Nuevo usuario</a>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Email</th>
+                            <th>Rol</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="u : ${page.content}">
+                            <td th:text="${u.id}"></td>
+                            <td th:text="${u.name + ' ' + u.lastName}"></td>
+                            <td th:text="${u.email}"></td>
+                            <td th:text="${u.role}"></td>
+                            <td>
+                                <a th:href="@{/admin/users/update/{id}(id=${u.id})}" class="btn btn-sm btn-outline-secondary"><i class="bi bi-pencil"></i></a>
+                                <button class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal"
+                                        data-delete-url="@{/admin/users/delete/{id}(id=${u.id})}"
+                                        data-delete-message="¿Eliminar usuario '${u.email}'?">
+                                    <i class="bi bi-trash3"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr th:if="${page.empty}">
+                            <td colspan="5" class="text-center">No hay usuarios</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Paginación -->
+            <nav th:if="${page.totalPages > 1}" aria-label="Paginación de usuarios">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item" th:classappend="${page.first} ? 'disabled'">
+                        <a class="page-link" th:href="@{/admin/users(page=${page.number - 1})}">Anterior</a>
+                    </li>
+                    <li th:each="i : ${#numbers.sequence(0, page.totalPages - 1)}" class="page-item" th:classappend="${i == page.number} ? 'active'">
+                        <a class="page-link" th:href="@{/admin/users(page=${i})}" th:text="${i+1}"></a>
+                    </li>
+                    <li class="page-item" th:classappend="${page.last} ? 'disabled'">
+                        <a class="page-link" th:href="@{/admin/users(page=${page.number + 1})}">Siguiente</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+    <!-- Script para modal (igual que file/list) -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const deleteModal = document.getElementById('confirmDeleteModal');
+            deleteModal.addEventListener('show.bs.modal', function(event) {
+                const button = event.relatedTarget;
+                const url = button.getAttribute('data-delete-url');
+                const message = button.getAttribute('data-delete-message') || '¿Está seguro de eliminar este usuario?';
+                document.getElementById('confirmDeleteMessage').textContent = message;
+                document.getElementById('confirmDeleteForm').action = url;
+            });
+        });
+    </script>
+</body>
+</html> 

@@ -21,6 +21,10 @@ public class FileService {
     private final FileRepository fileRepository;
     private final UserService userService;
 
+    public long count() {
+        return fileRepository.count();
+    }
+
     public Result<File> create(String cover, Long userId) {
         try {
             Result<ApplicationUser> userResult = userService.findById(userId);

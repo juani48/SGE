@@ -1,0 +1,51 @@
+/* ===== Paleta legal/notarial ===== */
+:root {
+  --bs-primary: #0F3D3E;
+  --bs-primary-rgb: 15,61,62;
+  --bs-secondary: #8A8377;
+  --bs-secondary-rgb: 138,131,119;
+  --bs-success: #4C7A51;
+  --bs-success-rgb: 76,122,81;
+  --bs-warning: #C9A227;
+  --bs-warning-rgb: 201,162,39;
+  --bs-danger: #8C2F2F;
+  --bs-danger-rgb: 140,47,47;
+  --bs-info: #3E6E8E;
+  --bs-info-rgb: 62,110,142;
+  --bs-light: #F7F5F0;
+  --bs-dark: #1A1A1A;
+  --bs-body-bg: var(--bs-light);
+}
+
+/* ===== Navbar ===== */
+.navbar-legal { background-color: var(--bs-primary); }
+.navbar-legal .navbar-brand,
+.navbar-legal .nav-link { color: var(--bs-light) !important; }
+.navbar-legal .nav-link:hover { color: var(--bs-warning) !important; }
+
+/* ===== Cards ===== */
+.card { border: 1px solid rgba(var(--bs-primary-rgb), 0.15); }
+.card-header { background-color: rgba(var(--bs-primary-rgb), 0.05); color: var(--bs-primary); font-weight: 600; }
+
+/* ===== Badges de estado - File ===== */
+.badge-newly-started    { background-color: var(--bs-secondary); }
+.badge-to-be-resolved   { background-color: var(--bs-info); }
+.badge-resolved         { background-color: var(--bs-success); }
+.badge-in-notification  { background-color: var(--bs-warning); color:#1A1A1A; }
+.badge-completed        { background-color: var(--bs-success); }
+.badge-forwarded-archive{ background-color: #6f2232; }
+
+/* ===== Badges de estado — Procedure ===== */
+.badge-document-submitted { background-color: var(--bs-secondary); }              /* gris: recién presentado */
+.badge-referred-review    { background-color: var(--bs-info); }                   /* azul: en revisión */
+.badge-office             { background-color: #6b5b1f; color: var(--bs-light); }  /* ocre oscuro: en despacho */
+.badge-resolution         { background-color: var(--bs-warning); color:#1A1A1A; } /* dorado: resolución emitida */
+.badge-notification       { background-color: var(--bs-success); }                /* verde: notificado */
+.badge-forwarded-archive  { background-color: #6f2232; }                          /* bordó: archivado (ya la tenías) */
+
+/* ===== Íconos con color de marca ===== */
+.icon-brand { color: var(--bs-primary); }
+
+/* ===== Botones con color de marca ===== */
+.modal-header { border-bottom: 1px solid rgba(var(--bs-primary-rgb), 0.1); }
+.modal-content { border: 1px solid rgba(var(--bs-primary-rgb), 0.15); }

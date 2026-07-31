@@ -1,81 +1,83 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-    layout:decorate="~{layout}">
-
-<head>
-    <meta charset="UTF-8">
-    <title>Lista de Expedientes</title>
-</head>
-
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout :: head}"></head>
 <body>
-    <div layout:fragment="content">
-        <h2 class="text-center">Lista de Expedientes</h2>
-        <button class="btn btn-primary mb-3" th:href="@{/file/create}">Crear Nuevo Expediente</button>
-        <div class="table-responsive">
-            <table class="table table-hover table-striped align-middle">
-                <thead class="table-dark">
-                    <tr>
-                        <th>ID</th>
-                        <th>Carátula</th>
-                        <th>Estado</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr th:each="item : ${page.content}">
-                        <td th:text="${item.id}"></td>
-                        <td th:text="${item.cover}"></td>
-                        <td>
-                            <span class="badge"
-                                th:class="${stateClassMap[item.state] != null ? stateClassMap[item.state] : 'bg-secondary'}"
-                                th:text="${item.state}"></span>
-                        </td>
-                        <td>
-                            <a class="btn btn-sm btn-outline-primary" th:href="@{/file/{id}(id=${item.id})}">Ver</a>
-                            <a class="btn btn-sm btn-outline-secondary" th:href="@{/file/update/{id}(id=${item.id})}">Editar</a>
-                            <a class="btn btn-sm btn-outline-danger" th:href="@{/file/delete/{id}(id=${item.id})}" onclick="return confirm('¿Estás seguro de que quieres eliminar este expediente?');">Eliminar</a>
-                        </td>
-                    </tr>
-                    <tr th:if="${page.empty}">
-                        <td colspan="4" class="text-center text-muted">No hay expedientes registrados.</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+    <div th:replace="~{layout :: body}">
+        <div th:fragment="content" class="container-fluid">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2><i class="bi bi-folder2-open icon-brand"></i> Expedientes</h2>
+                <a th:href="@{/file/create}" class="btn btn-primary"><i class="bi bi-plus-circle"></i> Nuevo expediente</a>
+            </div>
 
-        <nav aria-label="Paginación de expedientes" th:if="${!page.empty}">
-            <ul class="pagination justify-content-center">
-                <!-- Botón Anterior -->
-                <li class="page-item" th:classappend="${page.first} ? 'disabled' : ''">
-                    <a class="page-link" th:href="@{/files(page=${page.number - 1}, size=${page.size})}"
-                        aria-label="Anterior">
-                        <span aria-hidden="true">&laquo;</span>
-                    </a>
-                </li>
+            <!-- Tabla -->
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>#</th>
+                            <th>Carátula</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="file : ${page.content}">
+                            <td th:text="${file.id}"></td>
+                            <td th:text="${file.cover}"></td>
+                            <td>
+                                <span class="badge" th:class="${fileStateClassMap.get(file.state)}" th:text="${file.state}"></span>
+                            </td>
+                            <td>
+                                <a th:href="@{/file/detail/{id}(id=${file.id})}" class="btn btn-sm btn-outline-primary"><i class="bi bi-eye"></i></a>
+                                <a th:href="@{/file/update/{id}(id=${file.id})}" class="btn btn-sm btn-outline-secondary"><i class="bi bi-pencil"></i></a>
+                                <button class="btn btn-sm btn-outline-danger" 
+                                        data-bs-toggle="modal" 
+                                        data-bs-target="#confirmDeleteModal"
+                                        data-delete-url="@{/file/delete/{id}(id=${file.id})}"
+                                        data-delete-message="¿Eliminar expediente '${file.cover}'?">
+                                    <i class="bi bi-trash3"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr th:if="${page.empty}">
+                            <td colspan="4" class="text-center">No hay expedientes</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
 
-                <!-- Números de página -->
-                <li th:each="i : ${#numbers.sequence(0, page.totalPages - 1)}" class="page-item"
-                    th:classappend="${i == page.number} ? 'active' : ''">
-                    <a class="page-link" th:href="@{/files(page=${i}, size=${page.size})}" th:text="${i + 1}"></a>
-                </li>
-
-                <!-- Botón Siguiente -->
-                <li class="page-item" th:classappend="${page.last} ? 'disabled' : ''">
-                    <a class="page-link" th:href="@{/files(page=${page.number + 1}, size=${page.size})}"
-                        aria-label="Siguiente">
-                        <span aria-hidden="true">&raquo;</span>
-                    </a>
-                </li>
-            </ul>
-        </nav>
-
-        <!-- Opcional: mostrar información de total de elementos y página actual -->
-        <div class="text-muted text-center small">
-            Mostrando <span th:text="${page.number * page.size + 1}"></span> -
-            <span th:text="${page.last ? page.totalElements : (page.number + 1) * page.size}"></span>
-            de <span th:text="${page.totalElements}"></span> expedientes
+            <!-- Paginación -->
+            <nav th:if="${page.totalPages > 1}" aria-label="Paginación de expedientes">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item" th:classappend="${page.first} ? 'disabled'">
+                        <a class="page-link" th:href="@{/file/list(page=${page.number - 1})}" tabindex="-1">Anterior</a>
+                    </li>
+                    <li th:each="i : ${#numbers.sequence(0, page.totalPages - 1)}" class="page-item" th:classappend="${i == page.number} ? 'active'">
+                        <a class="page-link" th:href="@{/file/list(page=${i})}" th:text="${i+1}"></a>
+                    </li>
+                    <li class="page-item" th:classappend="${page.last} ? 'disabled'">
+                        <a class="page-link" th:href="@{/file/list(page=${page.number + 1})}">Siguiente</a>
+                    </li>
+                </ul>
+                <p class="text-center text-muted">
+                    Mostrando <span th:text="${page.content.size()}"></span> expedientes de <span th:text="${page.totalElements}"></span>.
+                </p>
+            </nav>
         </div>
     </div>
-</body>
 
+    <!-- Script para el modal de eliminación -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const deleteModal = document.getElementById('confirmDeleteModal');
+            deleteModal.addEventListener('show.bs.modal', function(event) {
+                const button = event.relatedTarget;
+                const url = button.getAttribute('data-delete-url');
+                const message = button.getAttribute('data-delete-message') || '¿Está seguro de eliminar este expediente?';
+                document.getElementById('confirmDeleteMessage').textContent = message;
+                document.getElementById('confirmDeleteForm').action = url;
+            });
+        });
+    </script>
+</body>
 </html>

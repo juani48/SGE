@@ -3,17 +3,17 @@ package com.bsoftware.sge.seeder;
 import java.util.List;
 
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Component;
 
 @Component
 public abstract class BaseSeeder<T, TId> implements CommandLineRunner {
 
-    private final CrudRepository<T, TId> repository;
+    private final JpaRepository<T, TId> repository;
     private List<T> data;
     private String name;
 
-    public BaseSeeder(CrudRepository<T, TId> repository, List<T> data, String name) {
+    public BaseSeeder(JpaRepository<T, TId> repository, List<T> data, String name) {
         this.repository = repository;
         this.data = data;
         this.name = name;

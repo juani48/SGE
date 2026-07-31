@@ -15,7 +15,6 @@ import org.springframework.security.web.SecurityFilterChain;
 
 import com.bsoftware.sge.service.CustomUserDetailsService;
 
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
@@ -71,8 +70,8 @@ public class SecurityConfig {
                 .permitAll()
             )
             .logout(logout -> logout
-                .logoutUrl("/api/logout")
-                .logoutSuccessHandler((req, res, auth) -> res.setStatus(HttpServletResponse.SC_OK))
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/login")
                 .invalidateHttpSession(true)
                 .deleteCookies("JSESSIONID")
             )

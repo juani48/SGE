@@ -24,18 +24,18 @@ public class UserService {
         }
     }
 
-    public Result<ApplicationUser> update(ApplicationUser user) {
-        Optional<ApplicationUser> opt = userRepository.findById(user.getId());
+    public Result<ApplicationUser> update(Long id, String name, String lastName, String email, String password) {
+        Optional<ApplicationUser> opt = userRepository.findById(id);
         if (opt.isPresent()) {
             ApplicationUser existingUser = opt.get();
-            existingUser.setEmail(user.getEmail());
-            existingUser.setName(user.getName());
-            existingUser.setLastName(user.getLastName());
-            existingUser.setPassword(user.getPassword());
+            existingUser.setEmail(email);
+            existingUser.setName(name);
+            existingUser.setLastName(lastName);
+            existingUser.setPassword(password);
             userRepository.save(existingUser);
             return Result.ok(existingUser);
         } else {
-            return Result.fail("User not found with id: " + user.getId());
+            return Result.fail("User not found with id: " + id);
         }
     }
 }

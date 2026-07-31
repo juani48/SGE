@@ -1,47 +1,25 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-    layout:decorate="~{layout}">
-
-<head>
-    <meta charset="UTF-8">
-    <title>Inicio</title>
-</head>
-
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout :: head}"></head>
 <body>
-    <div layout:fragment="content">
-        <div class="container mt-4">
-            <div class="row justify-content-center">
-                <div class="col-md-8 text-center">
-                    <h1 class="display-4 fw-bold">Bienvenido al Sistema de Gestión de Expedientes</h1>
-                    <p class="lead text-muted">Administra todos tus expedientes de forma rápida y sencilla.</p>
-                    <hr class="my-4">
-                </div>
-            </div>
-
-            <div class="row mt-4 g-4">
-                <div class="col-md-6">
-                    <div class="card h-100 shadow-sm">
-                        <div class="card-body text-center">
-                            <i class="bi bi-list-ul" style="font-size: 3rem; color: #0d6efd;"></i>
-                            <h5 class="card-title mt-3">Lista de Expedientes</h5>
-                            <p class="card-text">Consulta, edita o elimina expedientes existentes.</p>
-                            <a th:href="@{/files}" class="btn btn-primary">Ir al listado</a>
+    <div th:replace="~{layout :: body}">
+        <div th:fragment="content" class="container-fluid">
+            <h1 class="mb-4"><i class="bi bi-house-door icon-brand"></i> Bienvenido al Sistema de Gestión</h1>
+            <p>Resumen de actividad reciente o estadísticas.</p>
+            <!-- Aquí podrías mostrar gráficos o datos resumidos -->
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Expedientes</h5>
+                            <p class="display-4" th:text="${fileCount}"></p>
+                            <a th:href="@{/file/list}" class="btn btn-outline-primary">Ver todos</a>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6">
-                    <div class="card h-100 shadow-sm">
-                        <div class="card-body text-center">
-                            <i class="bi bi-plus-circle" style="font-size: 3rem; color: #198754;"></i>
-                            <h5 class="card-title mt-3">Crear Nuevo Expediente</h5>
-                            <p class="card-text">Añade un nuevo expediente al sistema.</p>
-                            <a th:href="@{/file/create}" class="btn btn-success">Crear ahora</a>
-                        </div>
-                    </div>
-                </div>
+                <!-- Más tarjetas -->
             </div>
         </div>
     </div>
 </body>
-
 </html>
