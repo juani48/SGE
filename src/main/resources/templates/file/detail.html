@@ -1,18 +1,24 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head th:replace="~{layout :: head}"></head>
+
 <body>
     <div th:replace="~{layout :: body}">
         <div th:fragment="content" class="container-fluid">
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h2><i class="bi bi-folder icon-brand"></i> Expediente #<span th:text="${file.id}"></span></h2>
                 <div>
-                    <a th:href="@{/file/update/{id}(id=${file.id})}" class="btn btn-outline-secondary"><i class="bi bi-pencil"></i> Editar</a>
+                    <a th:href="@{/file/update/{id}(id=${file.id})}" class="btn btn-outline-secondary"
+                        sec:authorize="hasRole('ADMIN') or hasRole('EDIT_FILE')"><i class="bi bi-pencil"></i> Editar</a>
                     <button class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal"
-                            data-delete-url="@{/file/delete/{id}(id=${file.id})}"
-                            data-delete-message="¿Eliminar expediente '${file.cover}'?">
+                        data-delete-url="@{/file/delete/{id}(id=${file.id})}"
+                        data-delete-message="¿Eliminar expediente '${file.cover}'?"
+                        sec:authorize="hasRole('ADMIN') or hasRole('DELETE_FILE')">
                         <i class="bi bi-trash3"></i> Eliminar
                     </button>
+                     <a th:href="@{/file/list}" class="btn btn-outline-primary"><i
+                            class="bi bi-arrow-left"></i> Volver a la lista de expedientes</a>
                 </div>
             </div>
 
@@ -24,7 +30,8 @@
                         <dd class="col-sm-9" th:text="${file.cover}"></dd>
                         <dt class="col-sm-3">Estado</dt>
                         <dd class="col-sm-9">
-                            <span class="badge" th:class="${fileStateClassMap.get(file.state)}" th:text="${file.state}"></span>
+                            <span class="badge" th:class="${fileStateClassMap.get(file.state)}"
+                                th:text="${file.state}"></span>
                         </dd>
                         <dt class="col-sm-3">Fecha creación</dt>
                         <dd class="col-sm-9" th:text="${file.creation}"></dd>
@@ -59,15 +66,22 @@
                             <td th:text="${proc.id}"></td>
                             <td th:text="${proc.content}"></td>
                             <td>
-                                <span class="badge" th:class="${procedureStateClassMap.get(proc.state)}" th:text="${proc.state}"></span>
+                                <span class="badge" th:class="${procedureStateClassMap.get(proc.state)}"
+                                    th:text="${proc.state}"></span>
                             </td>
                             <td th:text="${proc.creation}"></td>
                             <td>
-                                <a th:href="@{/procedure/{id}(id=${proc.id})}" class="btn btn-sm btn-outline-primary"><i class="bi bi-eye"></i></a>
-                                <a th:href="@{/procedure/update/{id}(id=${proc.id})}" class="btn btn-sm btn-outline-secondary"><i class="bi bi-pencil"></i></a>
-                                <button class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal"
-                                        data-delete-url="@{/procedure/delete/{id}(id=${proc.id})}"
-                                        data-delete-message="¿Eliminar trámite '${proc.content}'?">
+                                <a th:href="@{/procedure/detail/{id}(id=${proc.id})}" class="btn btn-sm btn-outline-primary"><i
+                                        class="bi bi-eye"></i></a>
+                                <a th:href="@{/procedure/update/{id}(id=${proc.id})}"
+                                    class="btn btn-sm btn-outline-secondary"
+                                    sec:authorize="hasRole('ADMIN') or hasRole('EDIT_PROCEDURE')"><i
+                                        class="bi bi-pencil"></i></a>
+                                <button class="btn btn-sm btn-outline-danger" data-bs-toggle="modal"
+                                    data-bs-target="#confirmDeleteModal"
+                                    sec:authorize="hasRole('ADMIN') or hasRole('DELETE_PROCEDURE')"
+                                    th:data-delete-url="@{/api/procedure/delete/{id}(id=${proc.id})}"
+                                    th:data-delete-message="|Está seguro de eliminar el trámite: ${proc.content}?|">
                                     <i class="bi bi-trash3"></i>
                                 </button>
                             </td>
@@ -82,9 +96,9 @@
     </div>
     <!-- Script para modal (similar al de list) -->
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const deleteModal = document.getElementById('confirmDeleteModal');
-            deleteModal.addEventListener('show.bs.modal', function(event) {
+            deleteModal.addEventListener('show.bs.modal', function (event) {
                 const button = event.relatedTarget;
                 const url = button.getAttribute('data-delete-url');
                 const message = button.getAttribute('data-delete-message') || '¿Está seguro de eliminar este elemento?';
@@ -94,4 +108,5 @@
         });
     </script>
 </body>
+
 </html>

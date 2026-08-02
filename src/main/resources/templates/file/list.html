@@ -1,12 +1,16 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head th:replace="~{layout :: head}"></head>
+
 <body>
     <div th:replace="~{layout :: body}">
         <div th:fragment="content" class="container-fluid">
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h2><i class="bi bi-folder2-open icon-brand"></i> Expedientes</h2>
-                <a th:href="@{/file/create}" class="btn btn-primary"><i class="bi bi-plus-circle"></i> Nuevo expediente</a>
+                <a th:href="@{/file/create}" class="btn btn-primary"
+                    sec:authorize="hasRole('ADMIN') or hasRole('CREATE_FILE')"><i class="bi bi-plus-circle"></i> Nuevo
+                    expediente</a>
             </div>
 
             <!-- Tabla -->
@@ -25,16 +29,21 @@
                             <td th:text="${file.id}"></td>
                             <td th:text="${file.cover}"></td>
                             <td>
-                                <span class="badge" th:class="${fileStateClassMap.get(file.state)}" th:text="${file.state}"></span>
+                                <span class="badge" th:class="${fileStateClassMap.get(file.state)}"
+                                    th:text="${file.state}"></span>
                             </td>
                             <td>
-                                <a th:href="@{/file/detail/{id}(id=${file.id})}" class="btn btn-sm btn-outline-primary"><i class="bi bi-eye"></i></a>
-                                <a th:href="@{/file/update/{id}(id=${file.id})}" class="btn btn-sm btn-outline-secondary"><i class="bi bi-pencil"></i></a>
-                                <button class="btn btn-sm btn-outline-danger" 
-                                        data-bs-toggle="modal" 
-                                        data-bs-target="#confirmDeleteModal"
-                                        data-delete-url="@{/file/delete/{id}(id=${file.id})}"
-                                        data-delete-message="¿Eliminar expediente '${file.cover}'?">
+                                <a th:href="@{/file/detail/{id}(id=${file.id})}"
+                                    class="btn btn-sm btn-outline-primary"><i class="bi bi-eye"></i></a>
+                                <a th:href="@{/file/update/{id}(id=${file.id})}"
+                                    class="btn btn-sm btn-outline-secondary"
+                                    sec:authorize="hasRole('ADMIN') or hasRole('EDIT_FILE')"><i
+                                        class="bi bi-pencil"></i></a>
+                                <button class="btn btn-sm btn-outline-danger" data-bs-toggle="modal"
+                                    data-bs-target="#confirmDeleteModal"
+                                    th:data-delete-url="@{/api/file/delete/{id}(id=${file.id})}"
+                                    th:data-delete-message="|¿Está seguro de eliminar el expediente: ${file.cover}?|"
+                                    sec:authorize="hasRole('ADMIN') or hasRole('DELETE_FILE')">
                                     <i class="bi bi-trash3"></i>
                                 </button>
                             </td>
@@ -52,7 +61,8 @@
                     <li class="page-item" th:classappend="${page.first} ? 'disabled'">
                         <a class="page-link" th:href="@{/file/list(page=${page.number - 1})}" tabindex="-1">Anterior</a>
                     </li>
-                    <li th:each="i : ${#numbers.sequence(0, page.totalPages - 1)}" class="page-item" th:classappend="${i == page.number} ? 'active'">
+                    <li th:each="i : ${#numbers.sequence(0, page.totalPages - 1)}" class="page-item"
+                        th:classappend="${i == page.number} ? 'active'">
                         <a class="page-link" th:href="@{/file/list(page=${i})}" th:text="${i+1}"></a>
                     </li>
                     <li class="page-item" th:classappend="${page.last} ? 'disabled'">
@@ -60,7 +70,8 @@
                     </li>
                 </ul>
                 <p class="text-center text-muted">
-                    Mostrando <span th:text="${page.content.size()}"></span> expedientes de <span th:text="${page.totalElements}"></span>.
+                    Mostrando <span th:text="${page.content.size()}"></span> expedientes de <span
+                        th:text="${page.totalElements}"></span>.
                 </p>
             </nav>
         </div>
@@ -68,9 +79,9 @@
 
     <!-- Script para el modal de eliminación -->
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const deleteModal = document.getElementById('confirmDeleteModal');
-            deleteModal.addEventListener('show.bs.modal', function(event) {
+            deleteModal.addEventListener('show.bs.modal', function (event) {
                 const button = event.relatedTarget;
                 const url = button.getAttribute('data-delete-url');
                 const message = button.getAttribute('data-delete-message') || '¿Está seguro de eliminar este expediente?';
@@ -80,4 +91,5 @@
         });
     </script>
 </body>
+
 </html>

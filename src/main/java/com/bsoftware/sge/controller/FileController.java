@@ -35,7 +35,7 @@ public class FileController {
         }  
         else {
             redirectAttributes.addFlashAttribute("errorMessage", result.getError());
-            return "redirect:/files/form"; 
+            return "redirect:/file/form"; 
         }
     }
     
@@ -63,7 +63,7 @@ public class FileController {
         } else {
             redirectAttributes.addFlashAttribute("errorMessage", result.getError());
         }
-        return "redirect:/files"; // Redirect back to the list of files
+        return "redirect:/file/list"; // Redirect back to the list of files
     }
     
 }

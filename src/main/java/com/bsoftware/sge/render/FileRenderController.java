@@ -7,6 +7,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 
@@ -86,6 +87,7 @@ public class FileRenderController {
     }
 
     @GetMapping("/create")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('CREATE_FILE')")
     public String create(Model model) {
         model.addAttribute("file", new FormFileDto());
         model.addAttribute("fileStateClassMap", this.getFileStateStyle());
@@ -93,6 +95,7 @@ public class FileRenderController {
     }
 
     @GetMapping("/update/{id}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('EDIT_FILE')")
     public String update(@PathVariable Long id, Model model) {
         Result<File> file = fileService.getById(id);
         if (file.isOk()) {

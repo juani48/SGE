@@ -2,6 +2,7 @@ package com.bsoftware.sge.render;
 
 import java.util.Map;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -48,6 +49,7 @@ public class ProcedureRenderController {
     }
     
     @GetMapping("/create/{fileId}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('CREATE_PROCEDURE')")
     public String create(@PathVariable Long fileId, Model model) {
         model.addAttribute("procedureStateClassMap", getProcedureStateStyle());
         model.addAttribute("procedure", new FormProcedureDto(fileId));
@@ -55,6 +57,7 @@ public class ProcedureRenderController {
     }
     
     @GetMapping("/update/{id}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('EDIT_PROCEDURE')")
     public String update(@PathVariable Long id, Model model) {
         Result<Procedure> procedure = procedureService.getById(id);
         if (procedure.isOk()) {

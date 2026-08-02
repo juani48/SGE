@@ -14,10 +14,10 @@
                         <p id="confirmDeleteMessage">¿Está seguro de eliminar este elemento?</p>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
                         <form id="confirmDeleteForm" method="post" style="display:inline;">
-                            <!-- El action se setea desde JavaScript -->
-                            <button type="submit" class="btn btn-danger">Eliminar</button>
+                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                            <button type="submit" class="btn btn-secondary">Eliminar</button>
                         </form>
                     </div>
                 </div>

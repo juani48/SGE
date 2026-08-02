@@ -59,7 +59,7 @@ public class ProcedureController {
         Result<Void> result = procedureService.delete(id);
         if (result.isOk()) {
             redirectAttributes.addFlashAttribute("successMessage", "Procedure deleted successfully");
-            return "redirect:/files"; // Redirect to the list of files after successful deletion
+            return "redirect:/file/list"; // Redirect to the list of files after successful deletion
         } else {
             redirectAttributes.addFlashAttribute("errorMessage", result.getError());
             return "redirect:/procedure/" + id; // Redirect back to the edit file page

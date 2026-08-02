@@ -54,9 +54,15 @@ public class SecurityConfig {
                     "/v3/api-docs/**"
                 ).permitAll()
                 
-                .requestMatchers(
-                    "/**"
-                ).hasRole("ADMIN") 
+                .requestMatchers("/admin/**", "/api/admin/**").hasRole("ADMIN") 
+
+                //.requestMatchers("/file/create/**", "/api/file/create/**").hasRole("CREATE_FILE")
+                //.requestMatchers("/file/update/**", "/api/file/update/**").hasRole("EDIT_FILE")
+                //.requestMatchers("/file/delete/**", "/api/file/delete/**").hasRole("DELETE_FILE")
+
+                //.requestMatchers("/procedure/create/**", "/api/procedure/create/**").hasRole("CREATE_PROCEDURE")
+                //.requestMatchers("/procedure/update/**", "/api/procedure/update/**").hasRole("EDIT_PROCEDURE")
+                //.requestMatchers("/procedure/delete/**", "/api/procedure/delete/**").hasRole("DELETE_PROCEDURE")
 
                 .anyRequest().authenticated()
             )

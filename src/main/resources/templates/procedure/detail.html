@@ -1,19 +1,25 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head th:replace="~{layout :: head}"></head>
+
 <body>
     <div th:replace="~{layout :: body}">
         <div th:fragment="content" class="container-fluid">
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h2><i class="bi bi-file-text icon-brand"></i> Trámite #<span th:text="${procedure.id}"></span></h2>
                 <div>
-                    <a th:href="@{/procedure/update/{id}(id=${procedure.id})}" class="btn btn-outline-secondary"><i class="bi bi-pencil"></i> Editar</a>
+                    <a th:href="@{/procedure/update/{id}(id=${procedure.id})}" class="btn btn-outline-secondary"
+                        sec:authorize="hasRole('ADMIN') or hasRole('EDIT_PROCEDURE')"><i class="bi bi-pencil"></i>
+                        Editar</a>
                     <button class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal"
-                            data-delete-url="@{/procedure/delete/{id}(id=${procedure.id})}"
-                            data-delete-message="¿Eliminar trámite #${procedure.id}?">
+                        data-delete-url="@{/procedure/delete/{id}(id=${procedure.id})}"
+                        data-delete-message="¿Eliminar trámite #${procedure.id}?"
+                        sec:authorize="hasRole('ADMIN') or hasRole('DELETE_PROCEDURE')">
                         <i class="bi bi-trash3"></i> Eliminar
                     </button>
-                    <a th:href="@{/file/detail/{id}(id=${procedure.fileId})}" class="btn btn-outline-primary"><i class="bi bi-arrow-left"></i> Volver al expediente</a>
+                    <a th:href="@{/file/detail/{id}(id=${procedure.fileId})}" class="btn btn-outline-primary"><i
+                            class="bi bi-arrow-left"></i> Volver al expediente</a>
                 </div>
             </div>
 
@@ -22,12 +28,14 @@
                 <div class="card-body">
                     <dl class="row">
                         <dt class="col-sm-3">Expediente</dt>
-                        <dd class="col-sm-9"><a th:href="@{/file/detail/{id}(id=${procedure.fileId})}" th:text="${procedure.fileId}"></a></dd>
+                        <dd class="col-sm-9"><a th:href="@{/file/detail/{id}(id=${procedure.fileId})}"
+                                th:text="${procedure.fileId}"></a></dd>
                         <dt class="col-sm-3">Contenido</dt>
                         <dd class="col-sm-9" th:text="${procedure.content}"></dd>
                         <dt class="col-sm-3">Estado</dt>
                         <dd class="col-sm-9">
-                            <span class="badge" th:class="${procedureStateClassMap.get(procedure.state)}" th:text="${procedure.state}"></span>
+                            <span class="badge" th:class="${procedureStateClassMap.get(procedure.state)}"
+                                th:text="${procedure.state}"></span>
                         </dd>
                         <dt class="col-sm-3">Fecha creación</dt>
                         <dd class="col-sm-9" th:text="${procedure.creation}"></dd>
@@ -42,9 +50,9 @@
     </div>
     <!-- Script para modal (igual que antes) -->
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const deleteModal = document.getElementById('confirmDeleteModal');
-            deleteModal.addEventListener('show.bs.modal', function(event) {
+            deleteModal.addEventListener('show.bs.modal', function (event) {
                 const button = event.relatedTarget;
                 const url = button.getAttribute('data-delete-url');
                 const message = button.getAttribute('data-delete-message') || '¿Está seguro de eliminar este trámite?';
@@ -54,4 +62,5 @@
         });
     </script>
 </body>
+
 </html>
